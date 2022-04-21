@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="#D4E5E6">
+    android:background="#FFF">
 
     <EditText
         android:id="@+id/editTextLogin"
@@ -81,8 +81,7 @@
 
     <Button
         android:id="@+id/btnLogin"
-        style="@style/Widget.AppCompat.Button.Borderless.Colored"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Зарегистрироваться"
