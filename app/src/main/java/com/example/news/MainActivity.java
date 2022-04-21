@@ -11,13 +11,54 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.window.SplashScreen;
+
+import java.util.concurrent.Executor;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+import androidx.biometric.BiometricPrompt;
 
 public class MainActivity extends AppCompatActivity {
+
+    private Executor executor;
+    private BiometricPrompt biometricPrompt;
+    private BiometricPrompt.PromptInfo promptInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        executor = ContextCompat.getMainExecutor(this);
+        biometricPrompt = new BiometricPrompt(MainActivity.this, executor, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
+                super.onAuthenticationError(errorCode, errString);
+                Intent intent = new Intent(MainActivity.this, Splash.class);
+                startActivity(intent);
+
+            }
+
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                Toast.makeText(MainActivity.this, "Успешно!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAuthenticationFailed() {
+                super.onAuthenticationFailed();
+            }
+        });
+
+        promptInfo = new BiometricPrompt.PromptInfo.Builder()
+                .setTitle("Авторизация")
+                .setSubtitle("Прислоните палец")
+                .setNegativeButtonText("Отмена")
+                .build();
+
+        biometricPrompt.authenticate(promptInfo);
 
         EditText editTextPassword2 = findViewById(R.id.editTextPassword2);
         Button btnLogin = findViewById(R.id.btnLogin);
